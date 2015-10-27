@@ -1,0 +1,3 @@
+LIBRARY cdll
+EXPORTS
+f
