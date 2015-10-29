@@ -7,12 +7,16 @@ using System.Threading.Tasks;
 
 namespace csexe {
     class Program {
-        delegate void h();
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        unsafe delegate void h(int*p);
         [DllImport("cdll.dll")]
-        extern static void f(h h);
+        extern static void f([MarshalAs(UnmanagedType.FunctionPtr), In]h h);
         static void Main(string[] args) {
-            {
-                f(() => { Console.WriteLine(123); });
+            unsafe{
+                f((int*p) => {
+                    Console.WriteLine((IntPtr)p);
+                    Console.WriteLine(*p);
+                });
             }
             Console.WriteLine(456);
             GC.Collect();
